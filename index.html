@@ -30,7 +30,7 @@
         .gold-glow:focus { box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.5); outline: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between">
 
     <!-- شريط التنقل العلوي -->
     <header class="bg-cardBg border-b gold-border sticky top-0 z-50">
@@ -87,7 +87,7 @@
             <!-- إنشاء حساب -->
             <div id="registerContainer" class="hidden space-y-4">
                 <form id="verifyStepForm" onsubmit="handleVerifyStudent(event)" class="space-y-4">
-                    <p class="text-xs text-gray-400 leading-relaxed">متاح حصرياً لطلاب قسم تكنولوجيا المعلومات المقيدين بالكشف الرسمي. أدخل اسمك الثنائي ورقم قيدك:</p>
+                    <p class="text-xs text-gray-400 leading-relaxed">متاح حصرياً لطلاب قسم تكنولوجيا المعلومات المقيدين بالكشف الرسمي:</p>
                     <div>
                         <label class="block text-sm text-gray-300 mb-1.5">الاسم الثنائي (كما في الكشف)</label>
                         <input type="text" id="regName" required placeholder="أدخل اسمك الأول مع اسم الأب أو اللقب" class="w-full bg-darkBg border gold-border rounded-xl px-4 py-3 text-white gold-glow">
@@ -250,12 +250,32 @@
         </div>
     </div>
 
+    <!-- شريط الحقوق والتواصل مع المطور مع تدرج جمالي متناسق -->
+    <footer class="bg-cardBg border-t gold-border py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right">
+            <div>
+                <p class="text-sm font-bold text-gray-200">
+                    تم التطوير والتصميم بواسطة <span class="text-gold font-extrabold text-base">مـعـيـن</span> ⚡
+                </p>
+                <p class="text-xs text-gray-400 mt-1">قسم تكنولوجيا المعلومات | جامعة 21 سبتمبر للعلوم الطبية والتطبيقية</p>
+            </div>
+            <div>
+                <a href="https://t.me/c8cce" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-gradient-to-r from-gold to-[#a8843c] hover:from-goldHover hover:to-gold text-darkBg font-extrabold px-5 py-2.5 rounded-xl shadow-lg hover:shadow-gold/20 transition-all duration-300 text-sm">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.716-.962 4.084-1.362 5.752-.169.706-.432.943-.685.965-.55.05-1.071-.365-1.603-.714-.833-.546-1.304-.886-2.115-1.42-.937-.618-.33-.957.204-1.517.14-.147 2.57-2.355 2.617-2.556.006-.025.011-.118-.044-.167-.056-.049-.138-.032-.198-.019-.084.019-1.428.908-4.032 2.665-.382.263-.728.392-1.038.385-.343-.008-.999-.194-1.488-.353-.6-.195-1.077-.298-1.035-.629.022-.172.261-.349.717-.53 2.808-1.223 4.682-2.03 5.62-2.421 2.677-1.114 3.234-1.308 3.596-1.314.08 0 .258.019.373.112.097.079.124.186.136.262.012.077.027.248.016.386z"/>
+                    </svg>
+                    <span>تواصل مع المطور تيليجرام</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
     <script>
         const SUPABASE_URL = 'https://mtshtpltlusekhllmnhc.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_FAf9c51m5yQbeHQ4QNZwGQ_XA8GLzJ0';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // قائمة المشرفين
+        // قائمة المشرفين (أنت والقسام)
         const ADMIN_ACADEMIC_IDS = ['27720109'];
         const ADMIN_NAMES = ['القسام احمد علي صالح العميسي', 'معين'];
 
@@ -745,15 +765,15 @@
                 const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
                 const filePath = `lectures/${fileName}`;
 
-                // 1. رفع الملف إلى Storage
+                // 1. رفع الملف إلى سلة materials
                 const { error: uploadError } = await sb.storage.from('materials').upload(filePath, file);
                 if (uploadError) throw uploadError;
 
-                // 2. الحصول على الرابط العام
+                // 2. استخراج الرابط العام المباشر
                 const { data: publicUrlData } = sb.storage.from('materials').getPublicUrl(filePath);
                 const fileUrl = publicUrlData.publicUrl;
 
-                // 3. تخزين البيانات في جدول materials
+                // 3. التخزين في جدول materials
                 const payload = {
                     course_id: parseInt(document.getElementById('matCourse').value),
                     section_type: document.getElementById('matSection').value,
