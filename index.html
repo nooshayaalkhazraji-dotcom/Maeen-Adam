@@ -252,6 +252,18 @@
         const SUPABASE_KEY = 'sb_publishable_FAf9c51m5yQbeHQ4QNZwGQ_XA8GLzJ0';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // قائمة المشرفين المعينين برقم القيد والاسم
+        const ADMIN_ACADEMIC_IDS = ['27720109'];
+        const ADMIN_NAMES = ['القسام احمد علي صالح العميسي', 'معين'];
+
+        function checkIsAdmin(student) {
+            if (!student) return false;
+            const normId = normalizeArabic(student.academic_id);
+            const isIdAdmin = ADMIN_ACADEMIC_IDS.some(id => normalizeArabic(id) === normId);
+            const isNameAdmin = ADMIN_NAMES.some(admName => isTwoPartNameMatch(admName, student.full_name) || student.full_name.includes('القسام'));
+            return student.role === 'admin' || isIdAdmin || isNameAdmin;
+        }
+
         let currentUser = null;
         let pendingVerifyStudent = null;
         let allCourses = [];
@@ -388,8 +400,17 @@
             const pass = document.getElementById('newPassword').value.trim();
             if (!pendingVerifyStudent) return;
 
+            const shouldBeAdmin = checkIsAdmin(pendingVerifyStudent);
+            const updatePayload = { 
+                password_hash: pass, 
+                is_registered: true 
+            };
+            if (shouldBeAdmin) {
+                updatePayload.role = 'admin';
+            }
+
             const { data, error } = await sb.from('students')
-                .update({ password_hash: pass, is_registered: true })
+                .update(updatePayload)
                 .eq('academic_id', pendingVerifyStudent.academic_id)
                 .select()
                 .single();
@@ -432,11 +453,20 @@
                 return;
             }
 
+            // تحديث الصلاحية تلقائياً في السيرفر إن كان القسام أو معيّن
+            if (checkIsAdmin(matchedStudent) && matchedStudent.role !== 'admin') {
+                matchedStudent.role = 'admin';
+                await sb.from('students').update({ role: 'admin' }).eq('academic_id', matchedStudent.academic_id);
+            }
+
             localStorage.setItem('it_failed_attempts', '0');
             loginSuccess(matchedStudent);
         }
 
         function loginSuccess(student) {
+            if (checkIsAdmin(student)) {
+                student.role = 'admin';
+            }
             currentUser = student;
             localStorage.setItem('it_logged_student', JSON.stringify(student));
             document.getElementById('authScreen').classList.add('hidden');
