@@ -60,10 +60,9 @@
         </div>
     </div>
 
-    <!-- شاشة المصادقة (تسجيل الدخول / إنشاء حساب) -->
+    <!-- شاشة المصادقة -->
     <div id="authScreen" class="flex-1 flex items-center justify-center p-4">
         <div class="bg-cardBg border gold-border rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl">
-            <!-- التبويبات -->
             <div class="grid grid-cols-2 gap-2 bg-darkBg p-1.5 rounded-xl mb-6 border gold-border">
                 <button id="tabLogin" onclick="switchAuthTab('login')" class="py-2.5 rounded-lg font-bold text-sm bg-gold text-darkBg transition">تسجيل الدخول</button>
                 <button id="tabRegister" onclick="switchAuthTab('register')" class="py-2.5 rounded-lg font-bold text-sm text-gray-400 hover:text-white transition">إنشاء حساب جديد</button>
@@ -72,7 +71,7 @@
             <div id="authError" class="hidden bg-red-500/15 border border-red-500/40 text-red-300 text-sm p-3 rounded-xl mb-4 text-center"></div>
             <div id="authSuccess" class="hidden bg-green-500/15 border border-green-500/40 text-green-300 text-sm p-3 rounded-xl mb-4 text-center"></div>
 
-            <!-- نموذج تسجيل الدخول -->
+            <!-- تسجيل الدخول -->
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm text-gray-300 mb-1.5">الرقم الأكاديمي أو الاسم الثنائي</label>
@@ -85,10 +84,10 @@
                 <button type="submit" class="w-full bg-gold hover:bg-goldHover text-darkBg font-bold py-3 rounded-xl transition mt-2">دخول للمنصة</button>
             </form>
 
-            <!-- نموذج إنشاء حساب جديد -->
+            <!-- إنشاء حساب -->
             <div id="registerContainer" class="hidden space-y-4">
                 <form id="verifyStepForm" onsubmit="handleVerifyStudent(event)" class="space-y-4">
-                    <p class="text-xs text-gray-400 leading-relaxed">متاح حصرياً لطلاب قسم تكنولوجيا المعلومات المقيدين بالكشف الرسمي. أدخل اسمك الثنائي (الأول والأب أو الأول واللقب) مع رقم قيدك:</p>
+                    <p class="text-xs text-gray-400 leading-relaxed">متاح حصرياً لطلاب قسم تكنولوجيا المعلومات المقيدين بالكشف الرسمي. أدخل اسمك الثنائي ورقم قيدك:</p>
                     <div>
                         <label class="block text-sm text-gray-300 mb-1.5">الاسم الثنائي (كما في الكشف)</label>
                         <input type="text" id="regName" required placeholder="أدخل اسمك الأول مع اسم الأب أو اللقب" class="w-full bg-darkBg border gold-border rounded-xl px-4 py-3 text-white gold-glow">
@@ -100,7 +99,6 @@
                     <button type="submit" class="w-full bg-gold hover:bg-goldHover text-darkBg font-bold py-3 rounded-xl transition">تحقق من البيانات</button>
                 </form>
 
-                <!-- الخطوة 2: تعيين كلمة المرور -->
                 <form id="setPasswordForm" onsubmit="handleCompleteRegistration(event)" class="hidden space-y-4">
                     <div class="bg-gold/10 border border-gold/40 p-3 rounded-xl text-sm text-gold text-center">
                         تم التحقق بنجاح: <span id="verifiedFullName" class="font-bold"></span> ✅
@@ -115,10 +113,9 @@
         </div>
     </div>
 
-    <!-- الشاشة الرئيسية للمنصة -->
+    <!-- الشاشة الرئيسية -->
     <main id="mainDashboard" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 py-8 space-y-8">
         
-        <!-- المحلل الذكي لنقاط الضعف -->
         <section class="bg-cardBg border gold-border rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h2 class="text-xl font-bold text-gold mb-1">🧠 المحلل الذكي لمستواك الدراسي</h2>
@@ -129,13 +126,13 @@
             </button>
         </section>
 
-        <!-- شبكة المقررات -->
+        <!-- المقررات -->
         <section>
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">📚 المقررات الدراسية المعتمدة</h2>
             <div id="coursesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
 
-        <!-- تفاصيل المقرر المحدد -->
+        <!-- تفاصيل المقرر -->
         <section id="courseDetailSection" class="hidden bg-cardBg border gold-border rounded-2xl p-6 space-y-6">
             <div class="flex flex-wrap justify-between items-center gap-4 border-b gold-border pb-4">
                 <div>
@@ -155,7 +152,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="bg-darkBg p-5 rounded-xl border gold-border">
-                    <h4 class="font-bold text-gold mb-4">📄 الملازم والملخصات</h4>
+                    <h4 class="font-bold text-gold mb-4">📄 الملازم والملخصات المرفوعة</h4>
                     <div id="materialsList" class="space-y-3 text-sm"></div>
                 </div>
                 <div class="bg-darkBg p-5 rounded-xl border gold-border">
@@ -195,14 +192,14 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- رفع ملزمة / ملخص -->
-                <form onsubmit="adminAddMaterial(event)" class="bg-darkBg p-4 rounded-xl border gold-border space-y-3">
-                    <h4 class="font-bold text-gold">➕ إضافة ملزمة / ملخص جديد</h4>
+                <!-- رفع مباشر للملفات من الهاتف -->
+                <form id="materialForm" onsubmit="adminAddMaterial(event)" class="bg-darkBg p-4 rounded-xl border gold-border space-y-3">
+                    <h4 class="font-bold text-gold">➕ رفع ملزمة / ملخص مباشرة</h4>
                     <select id="matCourse" required class="w-full bg-cardBg border gold-border rounded-lg p-2.5 text-sm"></select>
                     <div class="grid grid-cols-2 gap-2">
                         <select id="matSection" class="bg-cardBg border gold-border rounded-lg p-2.5 text-sm">
-                            <option value="theory">نظري</option>
-                            <option value="practical">عملي</option>
+                            <option value="theory">📘 نظري</option>
+                            <option value="practical">💻 عملي</option>
                         </select>
                         <input type="number" id="matLecture" required min="1" placeholder="رقم المحاضرة" class="bg-cardBg border gold-border rounded-lg p-2.5 text-sm">
                     </div>
@@ -210,12 +207,18 @@
                         <option value="pdf">📘 ملزمة مقرر</option>
                         <option value="summary">✨ ملخص مركز</option>
                     </select>
-                    <input type="text" id="matTitle" required placeholder="عنوان الملف" class="w-full bg-cardBg border gold-border rounded-lg p-2.5 text-sm">
-                    <input type="url" id="matUrl" required placeholder="رابط الملف (Google Drive / سحابي)" class="w-full bg-cardBg border gold-border rounded-lg p-2.5 text-sm">
-                    <button type="submit" class="w-full bg-gold text-darkBg font-bold py-2.5 rounded-lg text-sm">نشر الملف للطلاب</button>
+                    <input type="text" id="matTitle" required placeholder="عنوان الملف (مثلاً: المحاضرة 1)" class="w-full bg-cardBg border gold-border rounded-lg p-2.5 text-sm">
+                    
+                    <div class="border border-dashed border-gold/50 rounded-xl p-3 text-center bg-cardBg">
+                        <label for="matFileInput" class="block text-xs text-gray-300 mb-1 cursor-pointer">اختر ملف الـ PDF من هاتفك مباشرة:</label>
+                        <input type="file" id="matFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx" required class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-darkBg hover:file:bg-goldHover cursor-pointer">
+                    </div>
+                    
+                    <button type="submit" id="btnUploadMat" class="w-full bg-gold text-darkBg font-bold py-2.5 rounded-lg text-sm hover:bg-goldHover transition">نشر الملف للطلاب مباشرة</button>
+                    <p id="uploadStatusText" class="hidden text-xs text-center text-gold font-bold animate-pulse">جاري رفع الملف وحفظه، يرجى الانتظار...</p>
                 </form>
 
-                <!-- إضافة سؤال MCQ -->
+                <!-- إضافة أسئلة MCQ -->
                 <form onsubmit="adminAddQuestion(event)" class="bg-darkBg p-4 rounded-xl border gold-border space-y-3">
                     <h4 class="font-bold text-gold">🧠 إضافة سؤال اختبار (MCQ)</h4>
                     <select id="qCourse" required class="w-full bg-cardBg border gold-border rounded-lg p-2.5 text-sm"></select>
@@ -252,7 +255,7 @@
         const SUPABASE_KEY = 'sb_publishable_FAf9c51m5yQbeHQ4QNZwGQ_XA8GLzJ0';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // قائمة المشرفين المعينين برقم القيد والاسم
+        // قائمة المشرفين
         const ADMIN_ACADEMIC_IDS = ['27720109'];
         const ADMIN_NAMES = ['القسام احمد علي صالح العميسي', 'معين'];
 
@@ -260,7 +263,7 @@
             if (!student) return false;
             const normId = normalizeArabic(student.academic_id);
             const isIdAdmin = ADMIN_ACADEMIC_IDS.some(id => normalizeArabic(id) === normId);
-            const isNameAdmin = ADMIN_NAMES.some(admName => isTwoPartNameMatch(admName, student.full_name) || student.full_name.includes('القسام'));
+            const isNameAdmin = ADMIN_NAMES.some(admName => isTwoPartNameMatch(admName, student.full_name) || (student.full_name && student.full_name.includes('القسام')));
             return student.role === 'admin' || isIdAdmin || isNameAdmin;
         }
 
@@ -287,6 +290,7 @@
         }
 
         function isTwoPartNameMatch(inputName, officialFullName) {
+            if (!inputName || !officialFullName) return false;
             const inputParts = normalizeArabic(inputName).split(' ').filter(Boolean);
             const officialParts = normalizeArabic(officialFullName).split(' ').filter(Boolean);
             if (inputParts.length < 2 || officialParts.length < 2) return false;
@@ -453,7 +457,6 @@
                 return;
             }
 
-            // تحديث الصلاحية تلقائياً في السيرفر إن كان القسام أو معيّن
             if (checkIsAdmin(matchedStudent) && matchedStudent.role !== 'admin') {
                 matchedStudent.role = 'admin';
                 await sb.from('students').update({ role: 'admin' }).eq('academic_id', matchedStudent.academic_id);
@@ -554,15 +557,15 @@
 
             const matList = document.getElementById('materialsList');
             if (!mats || mats.length === 0) {
-                matList.innerHTML = `<p class="text-gray-500">لا توجد ملفات مرفوعة حالياً.</p>`;
+                matList.innerHTML = `<p class="text-gray-500">لا توجد ملفات مرفوعة حالياً في هذا القسم.</p>`;
             } else {
                 matList.innerHTML = mats.map(m => `
-                    <a href="${m.file_url}" target="_blank" class="flex justify-between items-center p-3 rounded-xl bg-cardBg border gold-border hover:border-gold transition">
+                    <a href="${m.file_url}" target="_blank" download class="flex justify-between items-center p-3 rounded-xl bg-cardBg border gold-border hover:border-gold transition">
                         <div>
                             <span class="text-xs text-gold font-bold">محاضرة ${m.lecture_number} (${m.material_type === 'summary' ? 'ملخص' : 'ملزمة'})</span>
                             <p class="font-bold text-white">${m.title}</p>
                         </div>
-                        <span class="text-gold text-xs font-bold">تحميل ↗</span>
+                        <span class="text-gold text-xs font-bold bg-gold/10 px-3 py-1.5 rounded-lg border border-gold/30">تحميل مباشر ⬇</span>
                     </a>
                 `).join('');
             }
@@ -722,22 +725,56 @@
             document.getElementById('adminModal').classList.toggle('hidden');
         }
 
+        // دالة الرفع المباشر إلى Supabase Storage
         async function adminAddMaterial(e) {
             e.preventDefault();
-            const payload = {
-                course_id: parseInt(document.getElementById('matCourse').value),
-                section_type: document.getElementById('matSection').value,
-                lecture_number: parseInt(document.getElementById('matLecture').value),
-                material_type: document.getElementById('matType').value,
-                title: document.getElementById('matTitle').value.trim(),
-                file_url: document.getElementById('matUrl').value.trim()
-            };
-            const { error } = await sb.from('materials').insert([payload]);
-            if (error) alert('حدث خطأ: ' + error.message);
-            else {
-                alert('تم نشر الملف بنجاح! ✅');
+            const fileInput = document.getElementById('matFileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('يرجى اختيار ملف أولاً!');
+                return;
+            }
+
+            const btnUpload = document.getElementById('btnUploadMat');
+            const statusText = document.getElementById('uploadStatusText');
+            btnUpload.disabled = true;
+            statusText.classList.remove('hidden');
+
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+                const filePath = `lectures/${fileName}`;
+
+                // 1. رفع الملف إلى Storage
+                const { error: uploadError } = await sb.storage.from('materials').upload(filePath, file);
+                if (uploadError) throw uploadError;
+
+                // 2. الحصول على الرابط العام
+                const { data: publicUrlData } = sb.storage.from('materials').getPublicUrl(filePath);
+                const fileUrl = publicUrlData.publicUrl;
+
+                // 3. تخزين البيانات في جدول materials
+                const payload = {
+                    course_id: parseInt(document.getElementById('matCourse').value),
+                    section_type: document.getElementById('matSection').value,
+                    lecture_number: parseInt(document.getElementById('matLecture').value),
+                    material_type: document.getElementById('matType').value,
+                    title: document.getElementById('matTitle').value.trim(),
+                    file_url: fileUrl
+                };
+
+                const { error: insertError } = await sb.from('materials').insert([payload]);
+                if (insertError) throw insertError;
+
+                alert('تم رفع ونشر الملف بنجاح! ✅');
                 e.target.reset();
                 if (selectedCourse) loadCourseContent();
+
+            } catch (err) {
+                alert('حدث خطأ أثناء الرفع: ' + err.message);
+            } finally {
+                btnUpload.disabled = false;
+                statusText.classList.add('hidden');
             }
         }
 
